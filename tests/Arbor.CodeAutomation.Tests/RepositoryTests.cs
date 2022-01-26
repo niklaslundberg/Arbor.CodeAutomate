@@ -21,6 +21,14 @@ public class RepositoryTests : IAsyncDisposable, IAsyncLifetime
 
         _gitRepository = await repository.Get(new Uri("https://github.com/niklaslundberg/Arbor.CodeAutomate.git"),
             CancellationToken.None);
+
+        var gitHubActionsAnalyzer = new GitHubActionsAnalyzer();
+        var repositoryAnalysis = gitHubActionsAnalyzer.GetAnalysis(_gitRepository);
+
+        if (repositoryAnalysis.GitHubActionsEnabled)
+        {
+
+        }
     }
 
     public Task InitializeAsync() => Task.CompletedTask;
