@@ -32,6 +32,11 @@
           "zio": "0.13.0"
         }
       },
+      "CliWrap": {
+        "type": "Transitive",
+        "resolved": "3.4.0",
+        "contentHash": "qSTJgg02Y++9f4nor+QeWptwkAT+2cpnG9Tv3TY1l4oF22RcJPzzFn65ty3LtD/L61BPrIB42/ZKhb6m1dPgoQ=="
+      },
       "JetBrains.Annotations": {
         "type": "Transitive",
         "resolved": "2021.3.0",
@@ -1104,7 +1109,8 @@
       "arbor.codeautomate": {
         "type": "Project",
         "dependencies": {
-          "Arbor.FileSystem": "0.5.0"
+          "Arbor.FileSystem": "0.5.0",
+          "CliWrap": "0.0.0"
         }
       }
     }

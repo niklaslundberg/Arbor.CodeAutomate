@@ -12,6 +12,12 @@
           "zio": "0.13.0"
         }
       },
+      "CliWrap": {
+        "type": "Direct",
+        "requested": "[*, )",
+        "resolved": "3.4.0",
+        "contentHash": "qSTJgg02Y++9f4nor+QeWptwkAT+2cpnG9Tv3TY1l4oF22RcJPzzFn65ty3LtD/L61BPrIB42/ZKhb6m1dPgoQ=="
+      },
       "JetBrains.Annotations": {
         "type": "Transitive",
         "resolved": "2021.3.0",
