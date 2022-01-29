@@ -7,12 +7,32 @@ namespace Arbor.CodeAutomation.Tests;
 
 public class RepositoryTests : IAsyncDisposable, IAsyncLifetime
 {
-    public RepositoryTests()
-    {
-        _fileSystem = new WindowsFs(new PhysicalFileSystem());
-    }
     private readonly WindowsFs _fileSystem;
     private GitRepositoryInfo? _gitRepository;
+    private GitRepositoryInfo? _templateRepository;
+
+    public RepositoryTests() => _fileSystem = new WindowsFs(new PhysicalFileSystem());
+
+    public ValueTask DisposeAsync()
+    {
+        if (_gitRepository is { })
+        {
+            _gitRepository.RepositoryDirectory.DeleteIfExists();
+        }
+
+        if (_templateRepository is { })
+        {
+            _templateRepository.RepositoryDirectory.DeleteIfExists();
+        }
+
+        _fileSystem.Dispose();
+
+        return ValueTask.CompletedTask;
+    }
+
+    public Task InitializeAsync() => Task.CompletedTask;
+
+    async Task IAsyncLifetime.DisposeAsync() => await DisposeAsync();
 
     [Fact]
     public async Task GetRepository()
@@ -22,28 +42,14 @@ public class RepositoryTests : IAsyncDisposable, IAsyncLifetime
         _gitRepository = await repository.Get(new Uri("https://github.com/niklaslundberg/Arbor.CodeAutomate.git"),
             CancellationToken.None);
 
+        _templateRepository = await repository.Get(new Uri("https://github.com/niklaslundberg/Arbor.CodeAutomate.git"),
+            CancellationToken.None);
+
         var gitHubActionsAnalyzer = new GitHubActionsAnalyzer();
-        var repositoryAnalysis = gitHubActionsAnalyzer.GetAnalysis(_gitRepository);
+        var repositoryAnalysis = await gitHubActionsAnalyzer.GetAnalysis(_gitRepository, _templateRepository);
 
-        if (repositoryAnalysis.GitHubActionsEnabled)
+        if (repositoryAnalysis.GitHubActionsEnabled && repositoryAnalysis.CodeFixSuggestions.Any())
         {
-
         }
-    }
-
-    public Task InitializeAsync() => Task.CompletedTask;
-
-    async Task IAsyncLifetime.DisposeAsync() => await DisposeAsync();
-
-    public ValueTask DisposeAsync()
-    {
-        if (_gitRepository is { })
-        {
-            _gitRepository.RepositoryDirectory.DeleteIfExists(true);
-        }
-
-        _fileSystem.Dispose();
-
-        return ValueTask.CompletedTask;
     }
 }

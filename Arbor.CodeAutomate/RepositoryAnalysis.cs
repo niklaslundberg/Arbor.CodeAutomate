@@ -5,14 +5,19 @@ namespace Arbor.CodeAutomate;
 
 public class RepositoryAnalysis
 {
-    private readonly ImmutableArray<FileEntry> _workflowFiles;
-
-    public RepositoryAnalysis(ImmutableArray<FileEntry> workflowFiles)
+    public RepositoryAnalysis(ImmutableArray<FileEntry> workflowFiles,
+        IReadOnlyCollection<ICodeFixSuggestion> codeFixSuggestions)
     {
-        _workflowFiles = workflowFiles;
+        CodeFixSuggestions = codeFixSuggestions;
+        WorkflowFiles = workflowFiles;
 
-        GitHubActionsEnabled = !_workflowFiles.IsDefaultOrEmpty;
+        GitHubActionsEnabled = !WorkflowFiles.IsDefaultOrEmpty;
     }
 
+    public ImmutableArray<FileEntry> WorkflowFiles { get; }
+
     public bool GitHubActionsEnabled { get; }
+
+
+    public IReadOnlyCollection<ICodeFixSuggestion> CodeFixSuggestions { get; }
 }
